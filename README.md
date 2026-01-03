@@ -10,52 +10,29 @@ Unlike complex RAG systems that require vector databases and embeddings, DontFor
 * **🔍 "God Mode" Retrieval:** Ask questions like *"What tasks did I have for Project Cyoni last week?"*. The system uses fuzzy search + time-filtering + AI analysis to find the exact answer.
 * **🛠️ Bulletproof Architecture:** Uses a single SQLite table with an FTS5 index. No sync issues, no complex vector math, no "missing ID" bugs.
 * **📊 Cost-Aware:** Every response shows you the token usage and record count, so you know exactly how much "brain power" you used.
-* **🔐 Private & Secure:** Self-hosted on your machine. Protected by a Secret Key.
-* **📝 Editor Support:** Automatically opens Vim/Nano for long notes.
+* **🔐 Private & Secure:** Your memories are stored locally in a SQLite database on your machine.
+* **📝 Editor Support:** Automatically opens your system editor for long notes.
 
 ## 🚀 Installation
 
 ### 1. Prerequisites
 
 * Python 3.10+
-* `uv` (for fast package management) or `pip`
 * A Google Gemini API Key (Free tier works great)
 
-### 2. Setup Server
+### 2. Quick Start
 
-```bash
-# Clone or create directory
-mkdir dontforget && cd dontforget
+1.  **Install the tool:**
+    ```bash
+    # From the project directory
+    pip install -e .
+    ```
 
-# Initialize project
-uv init
-uv add fastapi uvicorn python-dotenv google-genai pydantic
-
-# Create .env file
-echo 'GEMINI_API_KEY="your_gemini_key"' >> .env
-echo 'DONTFORGET_SECRET_KEY="your_secret_password"' >> .env
-
-```
-
-### 3. Run Server
-
-```bash
-uv run main.py
-# Server runs on http://0.0.0.0:8000
-
-```
-
-### 4. Setup CLI Tool (`mem`)
-
-1. Copy the `mem` script to `/usr/local/bin/mem`.
-2. Make it executable: `chmod +x /usr/local/bin/mem`.
-3. Add your secret key and API URL to your shell config (`~/.bashrc` or `~/.zshrc`):
-```bash
-export DONTFORGET_SECRET_KEY="your_secret_password"
-export DONTFORGET_API_URL="0.0.0.0:8000" # By default
-```
-
-
+2.  **Add your API Key:**
+    Create a `.env` file in `~/.dontforget/.env` (or in the current folder):
+    ```ini
+    GEMINI_API_KEY="your_gemini_api_key_here"
+    ```
 
 ---
 
@@ -74,7 +51,7 @@ mem r "Fix the login bug on Cyoni project"
 
 ```
 
-**Pro Tip:** Type `mem r` without arguments to open Vim for pasting long lists or code snippets.
+**Pro Tip:** Type `mem r` without arguments to open your default editor (Vim, Notepad, etc.) for pasting long lists or code snippets.
 
 ### Remind (Query)
 
@@ -103,21 +80,17 @@ mem d "That note about Akash"
 
 ## 🏗️ Architecture
 
-1. **Ingestion:**
-* User sends text -> AI generates `tags` (Concepts) -> Stored in SQLite (Raw Table + FTS Index).
-
-
-2. **Retrieval ("The Hunter"):**
-* User asks question -> AI extracts `keywords` -> FTS5 performs a fuzzy search (Broad Match).
-* **Context Stuffing:** The system retrieves the top 30 relevant rows and dumps them into the AI's context window.
-* **Synthesis:** The AI reads the raw rows, filters out irrelevant noise (e.g., ignoring old dates if you asked for "today"), and answers.
-
-
+**Standalone CLI:**
+*   The `mem` command directly manages a local SQLite database (`~/.dontforget/memory.db`) and communicates with the Google Gemini API.
+*   **Ingestion:** Text -> AI Tags -> SQLite (Raw + FTS Index).
+*   **Retrieval:** Query -> AI Keywords -> SQLite FTS Search -> AI Synthesis.
+*   No background server or complex setup required. Just install and run.
 
 ## 🛡️ Troubleshooting
 
-* **"Search Error"**: Usually means the database schema is out of sync. Delete `dontforget.db` and restart the server to rebuild cleanly.
-* **"Connection Refused"**: Ensure the server is running (`uv run main.py`) and port 8000 is open.
+*   **"GEMINI_API_KEY not found"**: Ensure your `.env` file is in the current directory or in `~/.dontforget/.env`.
+*   **"Search Error"**: If the database schema gets corrupted, you can safely delete `~/.dontforget/memory.db`. It will be recreated on the next run.
+*   **Command not found**: After running `pip install -e .`, you may need to restart your terminal or ensure your Python scripts folder is in your system's PATH.
 
 ---
 
