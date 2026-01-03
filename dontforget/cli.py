@@ -173,7 +173,7 @@ def get_editor_input(initial_text: bytes = b"") -> str:
 # --- COMMANDS ---
 
 ASCII_LOGO = f"""
-{Colors.BLUE}  ____              _    {Colors.YELLOW} _____                       _   
+{Colors.BLUE}  ____              _    {Colors.YELLOW} _____                     _   
 {Colors.BLUE} |  _ \\  ___  _ __ | |_  {Colors.YELLOW}|  ___|___  _ __ __ _  ___| |_ 
 {Colors.BLUE} | | | |/ _ \\| '_ \\| __| {Colors.YELLOW}| |_  / _ \\| '__/ _` |/ _ \\ __|
 {Colors.BLUE} | |_| | (_) | | | | |_  {Colors.YELLOW}|  _|  (_) | | | (_| |  __/ |_ 
