@@ -173,12 +173,13 @@ def get_editor_input(initial_text: bytes = b"") -> str:
 # --- COMMANDS ---
 
 ASCII_LOGO = f"""
-{{Colors.BLUE}}   ___           _   {{Colors.YELLOW}}___                    _ 
-{{Colors.BLUE}}  / _ \\___  _ __| |_ {{Colors.YELLOW}}| __|__ _ _ __ _ ___| |_ 
-{{Colors.BLUE}} | (_) / _ \\| '_ \\  _{{Colors.YELLOW}}| _|/ _ \\ '_/ _` / -_)  _|
-{{Colors.BLUE}}  \\___/\\___/|_|  \\__|{{Colors.YELLOW}}_|  \\___/_| \\__, \\___|\\__|
-{{Colors.BLUE}}                     {{Colors.YELLOW}}           |___/          {{Colors.NC}}
-""".format(Colors=Colors)
+{Colors.BLUE}  ____              _    {Colors.YELLOW} _____                       _   
+{Colors.BLUE} |  _ \\  ___  _ __ | |_  {Colors.YELLOW}|  ___|___  _ __ __ _  ___| |_ 
+{Colors.BLUE} | | | |/ _ \\| '_ \\| __| {Colors.YELLOW}| |_  / _ \\| '__/ _` |/ _ \\ __|
+{Colors.BLUE} | |_| | (_) | | | | |_  {Colors.YELLOW}|  _|  (_) | | | (_| |  __/ |_ 
+{Colors.BLUE} |____/ \\___/|_| |_|\\__| {Colors.YELLOW}|_|   \\___/|_|  \\__, |\\___|\\__|
+{Colors.BLUE}                         {Colors.YELLOW}                 |___/          {Colors.NC}
+"""
 
 class RichArgumentParser(argparse.ArgumentParser):
     def print_help(self, file=None):
