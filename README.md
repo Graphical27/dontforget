@@ -76,6 +76,16 @@ mem d "That note about Akash"
 
 ```
 
+### Preview (List)
+
+View all stored memories chronologically.
+
+```bash
+mem preview
+# or
+mem ls
+```
+
 ---
 
 ## 🏗️ Architecture

@@ -172,6 +172,22 @@ def get_editor_input(initial_text: bytes = b"") -> str:
 
 # --- COMMANDS ---
 
+ASCII_LOGO = f"""
+{{Colors.BLUE}}   ___           _   {{Colors.YELLOW}}___                    _ 
+{{Colors.BLUE}}  / _ \\___  _ __| |_ {{Colors.YELLOW}}| __|__ _ _ __ _ ___| |_ 
+{{Colors.BLUE}} | (_) / _ \\| '_ \\  _{{Colors.YELLOW}}| _|/ _ \\ '_/ _` / -_)  _|
+{{Colors.BLUE}}  \\___/\\___/|_|  \\__|{{Colors.YELLOW}}_|  \\___/_| \\__, \\___|\\__|
+{{Colors.BLUE}}                     {{Colors.YELLOW}}           |___/          {{Colors.NC}}
+""".format(Colors=Colors)
+
+class RichArgumentParser(argparse.ArgumentParser):
+    def print_help(self, file=None):
+        if file is None:
+            file = sys.stdout
+        print(ASCII_LOGO, file=file)
+        print(f"{Colors.GREEN}Your AI Second Brain for the Terminal{Colors.NC}\n", file=file)
+        super().print_help(file)
+
 def cmd_remember(args):
     content = " ".join(args.text)
     if not content:
@@ -336,7 +352,7 @@ def cmd_preview(args):
 def main():
     init_db()
     
-    parser = argparse.ArgumentParser(description="DontForget CLI")
+    parser = RichArgumentParser(description="DontForget CLI")
     subparsers = parser.add_subparsers(dest="command", required=True)
 
     # Remember
