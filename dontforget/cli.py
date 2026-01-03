@@ -309,6 +309,30 @@ def cmd_delete(args):
     except Exception as e:
         Colors.print(f"Error: {e}", Colors.RED)
 
+def cmd_preview(args):
+    conn = sqlite3.connect(DB_PATH)
+    conn.row_factory = sqlite3.Row
+    try:
+        cursor = conn.execute("SELECT * FROM memories ORDER BY timestamp DESC")
+        rows = cursor.fetchall()
+        
+        if not rows:
+            Colors.print("Database is empty.", Colors.YELLOW)
+            return
+
+        Colors.print(f"Found {len(rows)} memories:", Colors.BLUE)
+        for row in rows:
+            print(f"{Colors.YELLOW}[ID:{row['id']}] {Colors.BLUE}{row['timestamp']}{Colors.NC}")
+            print(f"{row['raw_text']}")
+            if row['ai_tags']:
+                print(f"{Colors.GREEN}Tags: {row['ai_tags']}{Colors.NC}")
+            print("-" * 40)
+            
+    except Exception as e:
+        Colors.print(f"Error: {e}", Colors.RED)
+    finally:
+        conn.close()
+
 def main():
     init_db()
     
@@ -329,6 +353,10 @@ def main():
     p_del = subparsers.add_parser("delete", aliases=['d'], help="Delete a memory")
     p_del.add_argument("query", nargs="+", help="Description to delete")
     p_del.set_defaults(func=cmd_delete)
+
+    # Preview
+    p_prev = subparsers.add_parser("preview", aliases=['p', 'list', 'ls'], help="List all memories")
+    p_prev.set_defaults(func=cmd_preview)
 
     if len(sys.argv) < 2:
         parser.print_help()
